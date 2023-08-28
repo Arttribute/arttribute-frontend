@@ -15,7 +15,7 @@ export default function Home() {
     const message = "Hello world";
     const signature = await signer.signMessage(message);
     //post to server
-    const response = await fetch("http://localhost:5000/auth/verify", {
+    const response = await fetch("http://localhost:5000/auth", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
