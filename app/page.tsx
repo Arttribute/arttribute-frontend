@@ -5,6 +5,8 @@ import { ethers } from "ethers";
 import Web3Modal from "web3modal";
 import { useState } from "react";
 
+const rootURL = "http://localhost:3000";
+
 export default function Home() {
   async function signMessage() {
     const web3Modal = new Web3Modal();
@@ -15,7 +17,6 @@ export default function Home() {
     const message = "Hello world";
     const signature = await signer.signMessage(message);
     //post to server
-    const rootURL = "http://localhost:3000";
     const response = await fetch(`${rootURL}/v1/auth`, {
       method: "POST",
       headers: {
@@ -37,7 +38,7 @@ export default function Home() {
     const userName = "Baranaba";
     const signature = await signer.signMessage(message);
     //post to server
-    const response = await fetch("http://localhost:5000/users/createuser", {
+    const response = await fetch(`${rootURL}/v1/users`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
