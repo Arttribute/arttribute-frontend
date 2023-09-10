@@ -7,9 +7,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
 const rootURL = "http://localhost:5000";
-import { Button } from "@/components/ui/button";
-
-const rootURL = "http://localhost:5000";
 
 export default function Home() {
   async function signMessage() {
