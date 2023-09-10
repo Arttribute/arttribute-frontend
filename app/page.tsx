@@ -15,7 +15,7 @@ export default function Home() {
     const message = "Hello world";
     const signature = await signer.signMessage(message);
     //post to server
-    const response = await fetch("http://localhost:5000/auth", {
+    const response = await fetch("http://localhost:5000/v1/auth", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -36,7 +36,7 @@ export default function Home() {
     const userName = "Baranaba";
     const signature = await signer.signMessage(message);
     //post to server
-    const response = await fetch("http://localhost:5000/users/createuser", {
+    const response = await fetch("http://localhost:5000/v1/users", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -47,10 +47,46 @@ export default function Home() {
     console.log(data);
   }
 
+  async function makePayment() {
+    //should prompt user to pay to given address and return transaction hash
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.BrowserProvider(connection);
+    const signer = await provider.getSigner();
+
+    const accounts = await provider.listAccounts();
+
+    // Set up the payment details
+    const receiverAddress = "0x362aF015FD7A4917CAaf0955b3b5042c9220e61F"; // Replace with the receiver's Ethereum address
+    const amountToSend = ethers.parseEther("0.01"); // Convert to wei value
+
+    // Create and send the transaction
+    const transaction = {
+      to: receiverAddress,
+      value: amountToSend,
+    };
+
+    const tx = await signer.sendTransaction(transaction);
+    console.log("Transaction hash:", tx.hash);
+  }
+
+  async function mintCertificate() {
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.BrowserProvider(connection);
+    const signer = await provider.getSigner();
+    const address = await signer.getAddress();
+    const message = "Mint certificate";
+    const signature = await signer.signMessage(message);
+    console.log(signature);
+  }
+
   return (
     <main className={styles.main}>
       <button onClick={signMessage}>Sign Message</button>
       <button onClick={createUser}>Create User</button>
+      <button onClick={makePayment}> Make payment</button>
+      <button onClick={mintCertificate}> mintCertificate </button>
     </main>
   );
 }
