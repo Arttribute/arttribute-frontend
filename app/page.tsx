@@ -4,8 +4,9 @@ import styles from "./page.module.css";
 import { ethers } from "ethers";
 import Web3Modal from "web3modal";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
-const rootURL = "http://localhost:3000";
+const rootURL = "http://localhost:5000";
 
 export default function Home() {
   async function signMessage() {
@@ -51,8 +52,8 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
-      <button onClick={signMessage}>Sign Message</button>
-      <button onClick={createUser}>Create User</button>
+      <Button onClick={signMessage}>Sign Message</Button>
+      <Button onClick={createUser}>Create User</Button>
     </main>
   );
 }
