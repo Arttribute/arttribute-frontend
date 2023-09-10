@@ -4,6 +4,9 @@ import styles from "./page.module.css";
 import { ethers } from "ethers";
 import Web3Modal from "web3modal";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+
+const rootURL = "http://localhost:5000";
 
 export default function Home() {
   async function signMessage() {
@@ -15,7 +18,7 @@ export default function Home() {
     const message = "Hello world";
     const signature = await signer.signMessage(message);
     //post to server
-    const response = await fetch("http://localhost:5000/v1/auth", {
+    const response = await fetch(`${rootURL}/v1/auth`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -36,7 +39,7 @@ export default function Home() {
     const userName = "Baranaba";
     const signature = await signer.signMessage(message);
     //post to server
-    const response = await fetch("http://localhost:5000/v1/users", {
+    const response = await fetch(`${rootURL}/v1/users`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -83,10 +86,10 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
-      <button onClick={signMessage}>Sign Message</button>
-      <button onClick={createUser}>Create User</button>
-      <button onClick={makePayment}> Make payment</button>
-      <button onClick={mintCertificate}> mintCertificate </button>
+      <Button onClick={signMessage}>Sign Message</Button>
+      <Button onClick={createUser}>Create User</Button>
+      <Button onClick={makePayment}> Make payment</Button>
+      <Button onClick={mintCertificate}> mintCertificate </Button>
     </main>
   );
 }
