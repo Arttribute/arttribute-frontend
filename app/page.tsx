@@ -77,6 +77,40 @@ export default function Home() {
     console.log(data);
   }
 
+  async function makePayment() {
+    //should prompt user to pay to given address and return transaction hash
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.BrowserProvider(connection);
+    const signer = await provider.getSigner();
+
+    const accounts = await provider.listAccounts();
+
+    // Set up the payment details
+    const receiverAddress = "0x362aF015FD7A4917CAaf0955b3b5042c9220e61F"; // Replace with the receiver's Ethereum address
+    const amountToSend = ethers.parseEther("0.01"); // Convert to wei value
+
+    // Create and send the transaction
+    const transaction = {
+      to: receiverAddress,
+      value: amountToSend,
+    };
+
+    const tx = await signer.sendTransaction(transaction);
+    console.log("Transaction hash:", tx.hash);
+  }
+
+  async function mintCertificate() {
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.BrowserProvider(connection);
+    const signer = await provider.getSigner();
+    const address = await signer.getAddress();
+    const message = "Mint certificate";
+    const signature = await signer.signMessage(message);
+    console.log(signature);
+  }
+
   const form = useForm<z.infer<typeof GenerateAPIKeySchema>>({
     resolver: zodResolver(GenerateAPIKeySchema),
     // defaultValues,
@@ -112,7 +146,7 @@ export default function Home() {
               <form onSubmit={form.handleSubmit(onSubmit)} onReset={onReset}>
                 <div className="grid grid-cols-[40%_60%] p-8">
                   <div>
-                    <FormLabel>Create API Key</FormLabel>
+                    <FormLabel>Authentication</FormLabel>
                   </div>
                   <div className="space-y-6">
                     <FormField
@@ -185,6 +219,8 @@ export default function Home() {
 			  */}
           <Button onClick={signMessage}>Connect Wallet</Button>
           <Button onClick={createUser}>Create User</Button>
+          <Button onClick={makePayment}> Make payment</Button>
+          <Button onClick={mintCertificate}> mintCertificate </Button>
         </div>
         <div className="col-span-1 col-start-1 row-span-2 row-start-1"></div>
       </main>
