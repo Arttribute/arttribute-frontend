@@ -93,12 +93,35 @@ const CreateItem = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const fData = new FormData();
+    if (formData.file) {
+      fData.append("file", formData.file, formData.file.name);
+    }
+    fData.append("title", formData.title);
+    fData.append("description", formData.description);
+    for (var i = 0; i < formData.tags.length; i++) {
+      fData.append("tags[]", formData.tags[i]);
+    }
+    fData.append("author", formData.author);
+    fData.append("source", formData.source);
+    fData.append("price_amount", formData.price.amount.toString());
+    fData.append("price_currency", formData.price.currency);
+    for (var i = 0; i < formData.license.length; i++) {
+      fData.append("license[]", formData.license[i]);
+    }
+    fData.append("needsRequest", formData.needsRequest.toString());
+
+    // for (let [key, value] of Array.from(fData)) {
+    //   console.log(`${key}: ${value}`);
+    // }
     const res = await fetch("http://localhost:5000/v1/items", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIweDA0NzdlMGNlM2Y5N2NjMDMzODE1NTgxYzQwNGMzMDM5MjE1MTdiZDhiZjlkZjMyYWIxMjlmMzMyY2E3MWJkMTFjYzU0MTNhMGUxNTE1MWYwYzdhZmYwZjI3ZDA5ODIxNGNmZWU5NTc0MjZlZTg5ZGVmYWYxNzI4ZTk0OTkzYTk3OTciLCJ3YWxsZXRfYWRkcmVzcyI6IjB4ODc0ODNDOTc3REFCY0IwMTcyMjY5ZjM0NkQyNTk3RGM0NDNmMEU2YiIsImlhdCI6MTY5NDYyNjA2MiwiZXhwIjoxNjk0NzEyNDYyfQ.jKXJWBTeBnobAB8WqtCRTaxZAn20Ack9xT2FyqvxIQ0",
+        ProjectAuthorization: "Bearer 17eoF8wkSIiCrcGFArlpfg==",
       },
-      body: JSON.stringify(formData),
+      body: fData,
     }).then((res) => res.json());
 
     console.log(res);
