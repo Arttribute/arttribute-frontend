@@ -123,7 +123,10 @@ export default function Home() {
   const onSubmit = useCallback(
     (values: z.infer<typeof GenerateAPIKeySchema>) => {
       const { projectId } = values;
-      ky.post(`v1/auth/api-key/${projectId}`, { credentials: "include" })
+      ky.post(`v1/auth/api-key/${projectId}`, {
+        credentials: "include",
+        prefixUrl: apiURL,
+      })
         .json<{ apiKey: string }>()
         .then(({ apiKey }) => {
           setApiKey(apiKey);
