@@ -124,8 +124,9 @@ export default function Home() {
     (values: z.infer<typeof GenerateAPIKeySchema>) => {
       const { projectId } = values;
       ky.post(`v1/auth/api-key/${projectId}`, {
-        credentials: "include",
+        // credentials: "include",
         prefixUrl: apiURL,
+        headers: { Authorization: `Bearer ${Cookie.get("accessToken")}` },
       })
         .json<{ apiKey: string }>()
         .then(({ apiKey }) => {
@@ -161,7 +162,11 @@ export default function Home() {
                             Project
                           </FormLabel>
                           <FormControl>
-                            <Input {...field} placeholder="Project ID" />
+                            <Input
+                              {...field}
+                              placeholder="Project ID"
+                              autoComplete="off"
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
