@@ -40,16 +40,24 @@ export default function Home() {
   async function signMessage() {
     const web3Modal = new Web3Modal();
     const connection = await web3Modal.connect();
+
     const provider = new ethers.BrowserProvider(connection);
     const signer = await provider.getSigner();
     const address = await signer.getAddress();
-    const message = "Hello world";
+
+    const api = ky.extend({ prefixUrl: apiURL });
+    const { message } = await api
+      .post("v1/auth/request", {
+        json: {
+          address,
+        },
+      })
+      .json<{ message: string }>();
     const signature = await signer.signMessage(message);
     //post to server
-    const data = await ky
+    const data = await api
       .post("v1/auth", {
         json: { address, message, signature },
-        prefixUrl: apiURL,
       })
       .json<{ token: string }>();
 
